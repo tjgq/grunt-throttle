@@ -5,6 +5,10 @@
   "author": "Tiago Quelhas",
   "license": "BSD",
   "main": "Gruntfile.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/tjgq/grunt-throttle.git"
+  },
   "engines": {
     "node": ">= 0.8.0"
   },
