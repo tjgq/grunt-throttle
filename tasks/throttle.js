@@ -1,7 +1,7 @@
 'use strict';
 
 var net = require('net');
-var Throttle = require('stream-throttle');
+var ThrottleGroup = require('stream-throttle').ThrottleGroup;
 
 module.exports = function(grunt) {
 
@@ -9,11 +9,14 @@ module.exports = function(grunt) {
 
     var self = this;
 
+    var upThrottle = new ThrottleGroup({rate: self.data.upstream});
+    var downThrottle = new ThrottleGroup({rate: self.data.downstream});
+
     var server = net.createServer(function (local) {
       var remote = net.createConnection({host: self.data.remote_host, port: self.data.remote_port});
 
-      var localThrottle = new Throttle({rate: self.data.upstream});
-      var remoteThrottle = new Throttle({rate: self.data.downstream});
+      var localThrottle = upThrottle.throttle();
+      var remoteThrottle = downThrottle.throttle();
 
       local.pipe(localThrottle).pipe(remote);
       remote.pipe(remoteThrottle).pipe(local);
