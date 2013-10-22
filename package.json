@@ -1,0 +1,29 @@
+{
+  "name": "grunt-throttle",
+  "description": "A Grunt plugin for testing under a throttled connection.",
+  "version": "0.1.0",
+  "author": "Tiago Quelhas",
+  "license": "BSD",
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt": "~0.4.1"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "gruntplugin"
+  ],
+  "dependencies": {
+    "stream-throttle": "git://github.com/tjgq/node-stream-throttle.git"
+  }
+}
