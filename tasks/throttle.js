@@ -18,6 +18,14 @@ module.exports = function(grunt) {
 
     var options = extend(defaultOptions, this.data);
 
+    if (typeof options.local_port === 'undefined') {
+      grunt.fatal('Must specify local port');
+    }
+
+    if (typeof options.remote_port === 'undefined') {
+      grunt.fatal('Must specify remote port');
+    }
+
     var keepAlive = this.flags.keepalive || options.keepalive;
 
     var upThrottle = new ThrottleGroup({ rate: options.upstream });
@@ -38,6 +46,16 @@ module.exports = function(grunt) {
     });
 
     server.listen(options.local_port, options.local_host);
+
+    server.on('listening', function() {
+      var localAddr = options.local_host + ':' + options.local_port;
+      var remoteAddr = options.remote_host + ':' + options.remote_port;
+      grunt.log.writeln('Throttling connections to ' + remoteAddr + ', go to ' + localAddr);
+    });
+
+    server.on('error', function(err) {
+      grunt.fatal(err);
+    });
 
     var done = this.async();
     if (!keepAlive) {
