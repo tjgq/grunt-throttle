@@ -28,6 +28,6 @@
     "gruntplugin"
   ],
   "dependencies": {
-    "stream-throttle": "git://github.com/tjgq/node-stream-throttle.git"
+    "stream-throttle": "^0.1.0"
   }
 }
