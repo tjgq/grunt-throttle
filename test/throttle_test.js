@@ -1,48 +1,38 @@
 'use strict';
 
+var net = require('net');
 var grunt = require('grunt');
 
-/*
-  ======== A Handy Little Nodeunit Reference ========
-  https://github.com/caolan/nodeunit
+var testStr = new Array(1024).join('0123456789');
 
-  Test methods:
-    test.expect(numAssertions)
-    test.done()
-  Test assertions:
-    test.ok(value, [message])
-    test.equal(actual, expected, [message])
-    test.notEqual(actual, expected, [message])
-    test.deepEqual(actual, expected, [message])
-    test.notDeepEqual(actual, expected, [message])
-    test.strictEqual(actual, expected, [message])
-    test.notStrictEqual(actual, expected, [message])
-    test.throws(block, [error], [message])
-    test.doesNotThrow(block, [error], [message])
-    test.ifError(value)
-*/
+var server;
 
 exports.throttle = {
+
   setUp: function(done) {
-    // setup here if necessary
-    done();
+    server = net.createServer(function(socket) {
+      socket.pipe(socket);
+    });
+    server.listen(8001, '127.0.0.1', done);
   },
-  default_options: function(test) {
+
+  tearDown: function(done) {
+    server.close(done);
+  },
+
+  default: function(test) {
     test.expect(1);
 
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
-
-    test.done();
-  },
-  custom_options: function(test) {
-    test.expect(1);
-
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
-
-    test.done();
-  },
+    var socket = net.createConnection(8002, '127.0.0.1', function() {
+      var recvStr = '';
+      socket.end(testStr);
+      socket.on('data', function(chunk) {
+        recvStr += chunk.toString();
+      });
+      socket.on('end', function() {
+        test.equal(recvStr, testStr, 'received string should equal sent string');
+        test.done();
+      });
+    });
+  }
 };
