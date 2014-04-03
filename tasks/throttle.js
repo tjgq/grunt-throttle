@@ -12,8 +12,12 @@ module.exports = function(grunt) {
     var upThrottle = new ThrottleGroup({rate: self.data.upstream});
     var downThrottle = new ThrottleGroup({rate: self.data.downstream});
 
-    var server = net.createServer(function (local) {
-      var remote = net.createConnection({host: self.data.remote_host, port: self.data.remote_port});
+    var server = net.createServer({ allowHalfOpen: true }, function (local) {
+      var remote = net.createConnection({
+        host: self.data.remote_host,
+        port: self.data.remote_port,
+        allowHalfOpen: true
+      });
 
       var localThrottle = upThrottle.throttle();
       var remoteThrottle = downThrottle.throttle();
