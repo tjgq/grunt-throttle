@@ -31,6 +31,7 @@
     "throttling"
   ],
   "dependencies": {
-    "stream-throttle": "^0.1.0"
+    "stream-throttle": "^0.1.0",
+    "extend": "^1.2.1"
   }
 }

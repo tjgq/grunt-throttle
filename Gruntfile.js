@@ -31,11 +31,8 @@ module.exports = function(grunt) {
     // Configuration to be run (and then tested).
     throttle: {
       default: {
-        remote_host: '127.0.0.1',
         remote_port: 8001,
         local_port: 8002,
-        upstream: 10*1024,
-        downstream: 100*1024,
       },
     },
 
