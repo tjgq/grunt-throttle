@@ -8,7 +8,8 @@ var defaultOptions = {
   local_host: '127.0.0.1',
   remote_host: '127.0.0.1',
   upstream: 10*1024,
-  downstream: 100*1024
+  downstream: 100*1024,
+  keepalive: false
 };
 
 module.exports = function(grunt) {
@@ -16,6 +17,8 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('throttle', 'Grunt plugin for testing under a throttled connection.', function() {
 
     var options = extend(defaultOptions, this.data);
+
+    var keepAlive = this.flags.keepalive || options.keepalive;
 
     var upThrottle = new ThrottleGroup({ rate: options.upstream });
     var downThrottle = new ThrottleGroup({ rate: options.downstream });
@@ -35,6 +38,11 @@ module.exports = function(grunt) {
     });
 
     server.listen(options.local_port, options.local_host);
+
+    var done = this.async();
+    if (!keepAlive) {
+      done();
+    }
   });
 
 };
