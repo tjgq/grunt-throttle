@@ -2,7 +2,7 @@
   "name": "grunt-throttle",
   "description": "A Grunt plugin for testing under a throttled connection.",
   "version": "0.1.0",
-  "author": "Tiago Quelhas",
+  "author": "Tiago Quelhas <tiagoq@gmail.com>",
   "license": "BSD",
   "main": "Gruntfile.js",
   "repository": {
