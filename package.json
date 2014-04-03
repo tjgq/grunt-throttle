@@ -25,7 +25,10 @@
     "grunt": "~0.4.1"
   },
   "keywords": [
-    "gruntplugin"
+    "gruntplugin",
+    "streams",
+    "connection",
+    "throttling"
   ],
   "dependencies": {
     "stream-throttle": "^0.1.0"
