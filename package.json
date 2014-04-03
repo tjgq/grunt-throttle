@@ -10,7 +10,7 @@
     "url": "http://github.com/tjgq/grunt-throttle.git"
   },
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.10.0"
   },
   "scripts": {
     "test": "grunt test"
