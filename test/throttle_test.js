@@ -3,7 +3,7 @@
 var net = require('net');
 var grunt = require('grunt');
 
-var testStr = new Array(1024).join('0123456789');
+var testStr = new Array(100*1024).join('0123456789');
 
 var server;
 

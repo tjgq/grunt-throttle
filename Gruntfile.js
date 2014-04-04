@@ -33,6 +33,9 @@ module.exports = function(grunt) {
       default: {
         remote_port: 8001,
         local_port: 8002,
+        upstream: 1000*1024,
+        downstream: 1000*1024,
+        latency: 250
       },
     },
 
