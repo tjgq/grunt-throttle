@@ -9,8 +9,31 @@ var defaultOptions = {
   remote_host: '127.0.0.1',
   upstream: 10*1024,
   downstream: 100*1024,
-  keepalive: false
+  keepalive: false,
+  latency: 0
 };
+
+function delayedPipe(fromStream, toStream, delayAmount) {
+  fromStream.on('data', function(chunk) {
+    setTimeout(function(){
+      var ready = toStream.write(chunk);
+      if (!ready) {
+        fromStream.pause();
+        fromStream.once('drain', fromStream.resume.bind(fromStream));
+      }
+    }, delayAmount);
+  });
+  fromStream.on('end', function() {
+    setTimeout(function(){
+      toStream.end();
+    }, delayAmount);
+  });
+  fromStream.on('error', function(err) {
+    setTimeout(function() {
+      toStream.emit('error', err);
+    }, delayAmount);
+  });
+}
 
 module.exports = function(grunt) {
 
@@ -41,8 +64,8 @@ module.exports = function(grunt) {
       var localThrottle = upThrottle.throttle();
       var remoteThrottle = downThrottle.throttle();
 
-      local.pipe(localThrottle).pipe(remote);
-      remote.pipe(remoteThrottle).pipe(local);
+      delayedPipe(local.pipe(localThrottle), remote, options.latency);
+      delayedPipe(remote.pipe(remoteThrottle), local, options.latency);
     });
 
     server.listen(options.local_port, options.local_host);
