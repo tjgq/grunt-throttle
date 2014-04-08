@@ -42,7 +42,16 @@ module.exports = function(grunt) {
       var remoteThrottle = downThrottle.throttle();
 
       local.pipe(localThrottle).pipe(remote);
+      local.on('error', function() {
+        remote.destroy();
+        local.destroy();
+      });
+
       remote.pipe(remoteThrottle).pipe(local);
+      remote.on('error', function() {
+        local.destroy();
+        remote.destroy();
+      });
     });
 
     server.listen(options.local_port, options.local_host);
